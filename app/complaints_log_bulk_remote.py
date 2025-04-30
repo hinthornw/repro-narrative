@@ -107,7 +107,7 @@ async def apply_single_sample_endpoint_node(state: ComplaintsBulkStateSchema, co
 
 
 # Build the graph
-bulk_gb = StateGraph(ComplaintsBulkStateSchema, input=ComplaintsBulkInputStateSchema, output=ComplaintsBulkOutputStateSchema)
+bulk_gb = StateGraph(ComplaintsBulkStateSchema, BulkConfigSchema, input=ComplaintsBulkInputStateSchema, output=ComplaintsBulkOutputStateSchema)
 
 bulk_gb.add_node("read_csv_file", read_csv_file_node)
 bulk_gb.add_node("apply_single_sample_endpoint", apply_single_sample_endpoint_node)

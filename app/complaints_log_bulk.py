@@ -19,6 +19,10 @@ class ComplaintsBulkOutputStateSchema(TypedDict):
 class ComplaintsBulkStateSchema(ComplaintsBulkInputStateSchema, ComplaintsBulkOutputStateSchema):
     input_df: pd.DataFrame
 
+# Config
+class BulkConfigSchema(TypedDict):
+    max_concurrency: Optional[int]
+
 
 # Nodes
 async def read_csv_file_node(state: ComplaintsBulkStateSchema):
@@ -36,7 +40,7 @@ async def read_csv_file_node(state: ComplaintsBulkStateSchema):
     }
 
 
-async def apply_single_sample_endpoint_node(state: ComplaintsBulkStateSchema):
+async def apply_single_sample_endpoint_node(state: ComplaintsBulkStateSchema, config: BulkConfigSchema):
     inputs = (
         state["input_df"]
         .apply(
@@ -46,9 +50,11 @@ async def apply_single_sample_endpoint_node(state: ComplaintsBulkStateSchema):
         .tolist()
     )
 
+    max_concurrency = config.get("configurable", {}).get("max_concurrency", 30)
+
     res = await single_sample_graph.abatch(
         [{"input_dict": input_dict} for input_dict in inputs],
-        config={"max_concurrency": 30},
+        config={"max_concurrency": max_concurrency},
     )
 
     return {
@@ -57,7 +63,7 @@ async def apply_single_sample_endpoint_node(state: ComplaintsBulkStateSchema):
 
 
 # Build the graph
-bulk_gb = StateGraph(ComplaintsBulkStateSchema, input=ComplaintsBulkInputStateSchema, output=ComplaintsBulkOutputStateSchema)
+bulk_gb = StateGraph(ComplaintsBulkStateSchema, BulkConfigSchema, input=ComplaintsBulkInputStateSchema, output=ComplaintsBulkOutputStateSchema)
 
 bulk_gb.add_node("read_csv_file", read_csv_file_node)
 bulk_gb.add_node("apply_single_sample_endpoint", apply_single_sample_endpoint_node)

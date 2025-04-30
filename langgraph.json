@@ -2,7 +2,8 @@
     "dependencies": ["."],
     "graphs": {
       "complaints_log_single_sample": "./app/complaints_log_single_sample.py:single_sample_graph",
-      "complaints_log_bulk": "./app/complaints_log_bulk.py:bulk_graph"
+      "complaints_log_bulk": "./app/complaints_log_bulk.py:bulk_graph",
+      "complaints_log_bulk_remote": "./app/complaints_log_bulk_remote.py:bulk_graph"
     },
     "env": ".env",
     "python_version": "3.12"

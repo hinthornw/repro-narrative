@@ -2,7 +2,7 @@ from typing import TypedDict
 from langgraph.graph import StateGraph, START, END
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
-from langchain.output_parsers import StrOutputParser
+from langchain_core.output_parsers import StrOutputParser
 import json
 
 # Define the state
@@ -69,7 +69,7 @@ async def processing_4_node(state: ComplaintsSingleSampleStateSchema):
     ])
     chain = prompt | llm | StrOutputParser()
     res = await chain.ainvoke(state["input_dict"])
-    
+
     return {
         "inner_4": {"d": 4},
     }

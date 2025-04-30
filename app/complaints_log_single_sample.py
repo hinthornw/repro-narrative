@@ -1,5 +1,9 @@
 from typing import TypedDict
 from langgraph.graph import StateGraph, START, END
+from langchain_openai import ChatOpenAI
+from langchain.prompts import ChatPromptTemplate
+from langchain.output_parsers import StrOutputParser
+import json
 
 # Define the state
 class ComplaintsSingleSampleInputStateSchema(TypedDict):
@@ -15,27 +19,59 @@ class ComplaintsSingleSampleStateSchema(ComplaintsSingleSampleInputStateSchema, 
     inner_3: dict
     inner_4: dict
 
-
 # Nodes - these nodes are just for demonstration purposes
 # In the real scenario, these are also graphs or subgraphs
 async def processing_1_node(state: ComplaintsSingleSampleStateSchema):
+    llm = ChatOpenAI(model="gpt-4o-mini")
+    prompt = ChatPromptTemplate.from_messages([
+        ("system", "Output the exact same input as you received. No changes, no additional information, no formatting, no explanation."),
+        ("user", json.dumps(state["input_dict"])),
+    ])
+    chain = prompt | llm | StrOutputParser()
+    res = await chain.ainvoke(state["input_dict"])
+
     return {
-        "inner_1": "node 1",
+        "inner_1": {"a": 1},
     }
 
 async def processing_2_node(state: ComplaintsSingleSampleStateSchema):
+    llm = ChatOpenAI(model="gpt-4o-mini")
+    prompt = ChatPromptTemplate.from_messages([
+        ("system", "Output the exact same input as you received. No changes, no additional information, no formatting, no explanation."),
+        ("user", json.dumps(state["input_dict"])),
+    ])
+    chain = prompt | llm | StrOutputParser()
+    res = await chain.ainvoke(state["input_dict"])
+
     return {
-        "inner_2": "node 2",
+        "inner_2": {"b": 2},
     }
 
 async def processing_3_node(state: ComplaintsSingleSampleStateSchema):
+
+    llm = ChatOpenAI(model="gpt-4o-mini")
+    prompt = ChatPromptTemplate.from_messages([
+        ("system", "Output the exact same input as you received. No changes, no additional information, no formatting, no explanation."),
+        ("user", json.dumps(state["input_dict"])),
+    ])
+    chain = prompt | llm | StrOutputParser()
+    res = await chain.ainvoke(state["input_dict"])
+
     return {
-        "inner_3": "node 3",
+        "inner_3": {"c": 3},
     }
 
 async def processing_4_node(state: ComplaintsSingleSampleStateSchema):
+    llm = ChatOpenAI(model="gpt-4o-mini")
+    prompt = ChatPromptTemplate.from_messages([
+        ("system", "Output the exact same input as you received. No changes, no additional information, no formatting, no explanation."),
+        ("user", json.dumps(state["input_dict"])),
+    ])
+    chain = prompt | llm | StrOutputParser()
+    res = await chain.ainvoke(state["input_dict"])
+    
     return {
-        "inner_4": "node 4",
+        "inner_4": {"d": 4},
     }
 
 async def merge_node(state: ComplaintsSingleSampleStateSchema):

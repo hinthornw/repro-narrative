@@ -39,7 +39,6 @@ async def read_csv_file_node(state: ComplaintsBulkStateSchema):
 async def apply_single_sample_endpoint_node(state: ComplaintsBulkStateSchema):
     inputs = (
         state["input_df"]
-        # .rename(columns=FILE_COLUMN_NAME_MAPPING)
         .apply(
             lambda row: row.to_dict(),
             axis=1,

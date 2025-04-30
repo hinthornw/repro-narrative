@@ -20,14 +20,14 @@ class ComplaintsSingleSampleStateSchema(ComplaintsSingleSampleInputStateSchema, 
 # Nodes - these nodes are just for demonstration purposes
 # In the real scenario, these are also graphs or subgraphs
 async def processing_1_node(state: ComplaintsSingleSampleStateSchema):
-    res = await subgraph1.ainvoke({"input_dict": {}})
+    res = await subgraph1.ainvoke({"input_dict": state["input_dict"]})
 
     return {
         "inner_1": {"a": 1},
     }
 
 async def processing_2_node(state: ComplaintsSingleSampleStateSchema):
-    res = await subgraph2.ainvoke({"input_dict": {}})
+    res = await subgraph2.ainvoke({"input_dict": state["input_dict"]})
 
     return {
         "inner_2": {"b": 2},
@@ -35,14 +35,14 @@ async def processing_2_node(state: ComplaintsSingleSampleStateSchema):
 
 async def processing_3_node(state: ComplaintsSingleSampleStateSchema):
 
-    res = await subgraph3.ainvoke({"input_dict": {}})
+    res = await subgraph3.ainvoke({"input_dict": state["input_dict"]})
 
     return {
         "inner_3": {"c": 3},
     }
 
 async def processing_4_node(state: ComplaintsSingleSampleStateSchema):
-    res = await subgraph4.ainvoke({"input_dict": {}})
+    res = await subgraph4.ainvoke({"input_dict": state["input_dict"]})
 
     return {
         "inner_4": {"d": 4},

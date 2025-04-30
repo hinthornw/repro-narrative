@@ -8,6 +8,8 @@ Runs locally with `langgraph up`.
 
 
 ## Graphs
+The Graphs follow a very similar structured that we have in our real app. The prompts are changed to have stub values.
+
 - `complaints_log_single_sample` -> processes a single complaint, a row from the app
 - `complaints_log_bulk` -> processes the whole file. It invokes the subgraph locally.
 - `complaints_log_bulk_remote` -> processes the whole file. Invokes the subgraph as a remote graph, thus should autoscale better.

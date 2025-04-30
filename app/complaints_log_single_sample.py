@@ -25,10 +25,10 @@ async def processing_1_node(state: ComplaintsSingleSampleStateSchema):
     llm = ChatOpenAI(model="gpt-4o-mini")
     prompt = ChatPromptTemplate.from_messages([
         ("system", "Output the exact same input as you received. No changes, no additional information, no formatting, no explanation."),
-        ("user", json.dumps(state["input_dict"])),
+        ("user", "{text}"),
     ])
     chain = prompt | llm | StrOutputParser()
-    res = await chain.ainvoke(state["input_dict"])
+    res = await chain.ainvoke(json.dumps(state["input_dict"]))
 
     return {
         "inner_1": {"a": 1},
@@ -38,10 +38,10 @@ async def processing_2_node(state: ComplaintsSingleSampleStateSchema):
     llm = ChatOpenAI(model="gpt-4o-mini")
     prompt = ChatPromptTemplate.from_messages([
         ("system", "Output the exact same input as you received. No changes, no additional information, no formatting, no explanation."),
-        ("user", json.dumps(state["input_dict"])),
+        ("user", "{text}"),
     ])
     chain = prompt | llm | StrOutputParser()
-    res = await chain.ainvoke(state["input_dict"])
+    res = await chain.ainvoke(json.dumps(state["input_dict"]))
 
     return {
         "inner_2": {"b": 2},
@@ -52,10 +52,10 @@ async def processing_3_node(state: ComplaintsSingleSampleStateSchema):
     llm = ChatOpenAI(model="gpt-4o-mini")
     prompt = ChatPromptTemplate.from_messages([
         ("system", "Output the exact same input as you received. No changes, no additional information, no formatting, no explanation."),
-        ("user", json.dumps(state["input_dict"])),
+        ("user", "{text}"),
     ])
     chain = prompt | llm | StrOutputParser()
-    res = await chain.ainvoke(state["input_dict"])
+    res = await chain.ainvoke(json.dumps(state["input_dict"]))
 
     return {
         "inner_3": {"c": 3},
@@ -65,10 +65,10 @@ async def processing_4_node(state: ComplaintsSingleSampleStateSchema):
     llm = ChatOpenAI(model="gpt-4o-mini")
     prompt = ChatPromptTemplate.from_messages([
         ("system", "Output the exact same input as you received. No changes, no additional information, no formatting, no explanation."),
-        ("user", json.dumps(state["input_dict"])),
+        ("user", "{text}"),
     ])
     chain = prompt | llm | StrOutputParser()
-    res = await chain.ainvoke(state["input_dict"])
+    res = await chain.ainvoke(json.dumps(state["input_dict"]))
 
     return {
         "inner_4": {"d": 4},

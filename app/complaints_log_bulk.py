@@ -51,6 +51,7 @@ async def apply_single_sample_endpoint_node(state: ComplaintsBulkStateSchema, co
     )
 
     max_concurrency = config.get("configurable", {}).get("max_concurrency", 30)
+    print(f"Max concurrency: {max_concurrency}")
 
     res = await single_sample_graph.abatch(
         [{"input_dict": input_dict} for input_dict in inputs],

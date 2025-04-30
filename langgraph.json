@@ -1,0 +1,10 @@
+{
+    "dependencies": ["."],
+    "graphs": {
+      "complaints_log_single_sample": "./app/complaints_log_single_sample.py:graph1",
+      "complaints_log_bulk": "./app/complaints_log_single_sample.py:agent"
+    },
+    "env": ".env",
+    "python_version": "3.12"
+  }
+  

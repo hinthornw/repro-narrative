@@ -1,0 +1,51 @@
+[tool.poetry]
+name = "langgraph-minimal"
+version = "0.1.0"
+description = "Minimal LangGraph server."
+authors = ["Luka Secerovic <luka@thenarrative.dev>"]
+readme = "README.md"
+packages = [
+    { include = "app" },
+]
+
+[tool.poetry.dependencies]
+python = ">3.12, <3.13"
+uvicorn = "^0.32.0"
+langserve = "^0.3.1"
+python-decouple = "^3.8"
+mypy = "^1.10.0"
+poetry-dotenv-plugin = "^0.2.0"
+python-dotenv = "^1.0.1"
+langchain-openai = "^0.3.12"
+langchain-core = "^0.3.28"
+langgraph = "^0.3.25"
+langchain = "^0.3.23"
+pydantic = "^2.5.2"
+aiosqlite = "^0.20.0"
+langchain-anthropic = "^0.3.10"
+graphviz = "^0.20.3"
+langgraph-checkpoint-postgres = "^2.0.3"
+psycopg = {extras = ["binary", "pool"], version = "^3.2.1"}
+# For talking to tabular data
+langchain-experimental = "^0.3.3"
+pandas = "^2.2.3"
+tabulate = "^0.9.0"
+apscheduler = "^3.11.0"
+weaviate-client = "^4.10.2"
+langchain-together = "^0.3.0"
+langsmith = "0.3.38"
+fastapi = "0.115.2"
+langgraph-cli = {extras = ["inmem"], version="^0.1.0"}
+langchain-google-vertexai = "2.0.20"
+aiofiles = "^24.1.0"
+fastcore = "1.8.1"
+
+
+[tool.poetry.group.dev.dependencies]
+langchain-cli = ">=0.0.32"
+pre-commit = "^4.0.1"
+fire = "^0.7.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

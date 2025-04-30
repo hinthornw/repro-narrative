@@ -71,7 +71,7 @@ async def apply_single_sample_endpoint_node(state: ComplaintsBulkStateSchema, co
 
         all_results = await parallel_async(
             remote_graph.ainvoke,
-            inputs,
+            [{"input_dict": input} for input in inputs],
             n_workers=max_concurrency,
         )
 
@@ -88,7 +88,7 @@ async def apply_single_sample_endpoint_node(state: ComplaintsBulkStateSchema, co
             print(f"Number of requests in batch: {len(batch_inputs)}")
             runs = await lg_client.runs.create_batch(
                 [
-                    {"assistant_id": "complaints_log_single_sample", "input": input}
+                    {"assistant_id": "complaints_log_single_sample", "input": {"input_dict": input}}
                     for input in batch_inputs
                 ]
             )

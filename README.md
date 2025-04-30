@@ -16,3 +16,10 @@ The Graphs follow a very similar structured that we have in our real app. The pr
     - It is parametrized with:
         - `max_concurrency` -> the maximum number of concurrent requests it would make. Default is `30`.
         - `use_fastcore` -> if `False` it will use the built in batching in `langgraph sdk`. If `True` it will make concurrent requests to the remote graph, limiting their number to `max_concurrency`. Defalut is `False`.
+
+## Graphs with subgraphs
+Our produciton agents contain nested subgraphs. It can happen that a graph calls a subgraph that calls another subgraph.
+
+In the `/subgraph` folder, the logic is the same as in the parent folder, except that `single sample` graph calls subgraphs instead of `ChatOpenAI`.
+
+`complaints_log_bulk_subgraph` is the closest here that we have in production.

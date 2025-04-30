@@ -1,52 +1,79 @@
-from langchain_openai import ChatOpenAI
-from langgraph.graph import START, END, StateGraph
-from typing import TypedDict, Annotated
+from typing import TypedDict
+from langgraph.graph import StateGraph, START, END
 
-def reduce(a, b):
-    if a is None:
-        return b
-    else:
-        return a
+# Define the state
+class ComplaintsSingleSampleInputStateSchema(TypedDict):
+    input_dict: dict
 
-
-async def complaints_log(state):
-    llm = ChatOpenAI()
-    await llm.ainvoke("Hey")
+class ComplaintsSingleSampleOutputStateSchema(TypedDict):
+    output: dict
 
 
-class State1(TypedDict):
-   data: Annotated[dict, reduce]
+class ComplaintsSingleSampleStateSchema(ComplaintsSingleSampleInputStateSchema, ComplaintsSingleSampleOutputStateSchema):
+    inner_1: dict
+    inner_2: dict
+    inner_3: dict
+    inner_4: dict
 
 
-graph0 = StateGraph(State1)
-graph0.add_node(complaints_log)
-graph0.add_edge(START, "complaints_log")
-graph0 = graph0.compile()
+# Nodes - these nodes are just for demonstration purposes
+# In the real scenario, these are also graphs or subgraphs
+async def processing_1_node(state: ComplaintsSingleSampleStateSchema):
+    return {
+        "inner_1": "node 1",
+    }
+
+async def processing_2_node(state: ComplaintsSingleSampleStateSchema):
+    return {
+        "inner_2": "node 2",
+    }
+
+async def processing_3_node(state: ComplaintsSingleSampleStateSchema):
+    return {
+        "inner_3": "node 3",
+    }
+
+async def processing_4_node(state: ComplaintsSingleSampleStateSchema):
+    return {
+        "inner_4": "node 4",
+    }
+
+async def merge_node(state: ComplaintsSingleSampleStateSchema):
+    return {
+        "output": {
+            "o_1": state["inner_1"],
+            "o_2": state["inner_2"],
+            "o_3": state["inner_3"],
+            "o_4": state["inner_4"],
+        },
+    }
+
+# Build the graph
+# gb = graph builder
+single_sample_gb = StateGraph(ComplaintsSingleSampleStateSchema, input=ComplaintsSingleSampleInputStateSchema, output=ComplaintsSingleSampleOutputStateSchema)
+
+single_sample_gb.add_node("processing_1", processing_1_node)
+single_sample_gb.add_node("processing_2", processing_2_node)
+single_sample_gb.add_node("processing_3", processing_3_node)
+single_sample_gb.add_node("processing_4", processing_4_node)
+single_sample_gb.add_node("merge", merge_node)
+
+single_sample_gb.add_edge(START, "processing_1")
+single_sample_gb.add_edge(START, "processing_2")
+single_sample_gb.add_edge(START, "processing_3")
+single_sample_gb.add_edge(START, "processing_4")
 
 
-graph1 = StateGraph(State1)
-graph1.add_node("s1", graph0)
-graph1.add_node("s2", graph0)
-graph1.add_node("s3", graph0)
-graph1.add_node("s4", graph0)
-graph1.add_edge(START, "s1")
-graph1.add_edge(START, "s2")
-graph1.add_edge(START, "s3")
-graph1.add_edge(START, "s4")
-graph1 = graph1.compile()
+single_sample_gb.add_edge(
+    [
+        "processing_1",
+        "processing_2",
+        "processing_3",
+        "processing_4",
+    ],
+    "merge",
+)
 
+single_sample_gb.add_edge("merge", END)
 
-async def process_rows(state):
-    rows = [{"data": r} for r in state['rows']]
-    print(rows)
-    await graph1.abatch(rows, config={"max_concurrency": 30})
-
-class State2(TypedDict):
-   rows: list
-
-
-graph2 = StateGraph(State2)
-graph2.add_node(process_rows)
-graph2.add_edge(START, "process_rows")
-graph2.add_edge("process_rows", END)
-agent = graph2.compile()
+single_sample_graph = single_sample_gb.compile()
